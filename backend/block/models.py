@@ -20,5 +20,7 @@ class Group(models.Model):
 
     ind_val = models.FloatField()
 
+    serv_name = models.CharField(max_length=230)
+
     def __str__(self):
         return self.name + " " + self.email
