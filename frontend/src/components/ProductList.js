@@ -27,6 +27,7 @@ class ProductList extends Component {
               <th>Service Wallet Address</th>
               <th>Individual Amount</th>
               <th>Service Acc ID</th>
+              <th>Renewal Date & Time</th>
               <th></th>
             </tr>
           </thead>
@@ -51,6 +52,7 @@ class ProductList extends Component {
                   <td>{prod.dest_wal}</td>
                   <td>{prod.ind_val}</td>
                   <td>{prod.serv_acc_id}</td>
+                  <td>{prod.ren}</td>
                   <td align="center">
                     {/* <NewProductModal
                       create={false}
