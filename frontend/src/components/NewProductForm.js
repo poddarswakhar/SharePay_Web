@@ -20,14 +20,15 @@ class NewProductForm extends React.Component {
     dest_wal: "",
     ind_val: "",
     serv_name: "",
-    serv_acc_id: ""
+    serv_acc_id: "",
+    ren: ""
   };
 
   // mounting the form and setting the values
   componentDidMount() {
     if (this.props.products) {
-      const { user1_name, user1_wal, user2_name, user2_wal, user3_name, user3_wal, dest_wal, ind_val, serv_name, serv_acc_id} = this.props.products;
-      this.setState({ user1_name, user1_wal, user2_name, user2_wal, user3_name, user3_wal, dest_wal, ind_val, serv_name, serv_acc_id });
+      const { user1_name, user1_wal, user2_name, user2_wal, user3_name, user3_wal, dest_wal, ind_val, serv_name, serv_acc_id, ren} = this.props.products;
+      this.setState({ user1_name, user1_wal, user2_name, user2_wal, user3_name, user3_wal, dest_wal, ind_val, serv_name, serv_acc_id, ren });
     }
   }
 
@@ -177,6 +178,17 @@ class NewProductForm extends React.Component {
           <Input
             type="text"
             name="serv_acc_id"
+            onChange={this.onChange}
+            required
+            value={this.defaultIfEmpty(this.state.methodology)}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="ren">Renewal Date & Time:</Label>
+          <Input
+            type="datetime-local"
+            name="ren"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.methodology)}
