@@ -20,7 +20,8 @@ def grp(request):
 	"user3_wal": "333",
 	"dest_wal": "444",
 	"ind_val": 21,
-	"serv_name": "Netflix"
+	"serv_name": "Netflix",
+	"serv_acc_id": "123123"
 }
     """
     if request.method == 'GET':
@@ -36,7 +37,7 @@ def grp(request):
                 temp_data = Group(user1_name=n['user1_name'], user1_wal=n['user1_wal'], user2_name=n['user2_name'],
                                   user2_wal=n['user2_wal'],
                                   user3_name=n['user3_name'], user3_wal=n['user3_wal'], dest_wal=n["dest_wal"],
-                                  ind_val=n["ind_val"], serv_name=n["serv_name"])
+                                  ind_val=n["ind_val"], serv_name=n["serv_name"], serv_acc_id=n["serv_acc_id"])
                 temp_data.save()
                 return Response(status=status.HTTP_201_CREATED)
             except:

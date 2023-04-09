@@ -10,20 +10,24 @@ import { API_URL, API_URL_D } from "../constants";
 class NewProductForm extends React.Component {
   // state variable and state management
   state = {
-    productId: 0,
-    productName: "",
-    productOwnerName: "",
-    Developers: "",
-    scrumMasterName: "",
-    startDate: "",
-    methodology: ""
+    id: 0,
+    user1_name: "",
+    user1_wal: "",
+    user2_name: "",
+    user2_wal: "",
+    user3_name: "",
+    user3_wal: "",
+    dest_wal: "",
+    ind_val: "",
+    serv_name: "",
+    serv_acc_id: ""
   };
 
   // mounting the form and setting the values
   componentDidMount() {
     if (this.props.products) {
-      const { productId, productName, productOwnerName, Developers, scrumMasterName, startDate, methodology} = this.props.products;
-      this.setState({ productId, productName, productOwnerName, Developers, scrumMasterName, startDate, methodology });
+      const { user1_name, user1_wal, user2_name, user2_wal, user3_name, user3_wal, dest_wal, ind_val, serv_name, serv_acc_id} = this.props.products;
+      this.setState({ user1_name, user1_wal, user2_name, user2_wal, user3_name, user3_wal, dest_wal, ind_val, serv_name, serv_acc_id });
     }
   }
 
@@ -38,7 +42,6 @@ class NewProductForm extends React.Component {
   createProduct = e => {
     //this.state["Developers"] = this.state["Developers"].split(",");
     e.preventDefault();
-    this.state.Developers = this.state.Developers.toString().split(",");
     axios.post(API_URL, this.state).then(() => {
       this.props.resetState();
       this.props.toggle();
@@ -76,60 +79,60 @@ class NewProductForm extends React.Component {
     return (
       <Form onSubmit={this.props.products ? this.editProduct : this.createProduct}>
         <FormGroup>
-          <Label for="productName">User 1 Name:</Label>
+          <Label for="user1_name">User 1 Name:</Label>
           <Input
             type="text"
-            name="productName"
+            name="user1_name"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.productName)}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="productOwnerName">User 1 Wallet Address:</Label>
+          <Label for="user1_wal">User 1 Wallet Address:</Label>
           <Input
             type="text"
-            name="productOwnerName"
+            name="user1_wal"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.productOwnerName)}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="Developers">User 2 Name:</Label>
+          <Label for="user2_name">User 2 Name:</Label>
           <Input
             type="text"
-            name="Developers"
+            name="user2_name"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.Developers)}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="scrumMasterName">User 2 Wallet Address:</Label>
+          <Label for="user2_wal">User 2 Wallet Address:</Label>
           <Input
             type="text"
-            name="scrumMasterName"
+            name="user2_wal"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.scrumMasterName)}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="startDate">User 3 Name:</Label>
+          <Label for="user3_name">User 3 Name:</Label>
           <Input
-            type="date-input"
-            name="startDate"
+            type="text"
+            name="user3_name"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.startDate)}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="methodology">User 3 Wallet Address:</Label>
+          <Label for="user3_wal">User 3 Wallet Address:</Label>
           <Input
             type="text"
-            name="methodology"
+            name="user3_wal"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.methodology)}
@@ -137,10 +140,10 @@ class NewProductForm extends React.Component {
         </FormGroup>
 
         <FormGroup>
-          <Label for="methodology">Service Name:</Label>
+          <Label for="dest_wal">Service Name:</Label>
           <Input
             type="text"
-            name="methodology"
+            name="dest_wal"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.methodology)}
@@ -148,10 +151,10 @@ class NewProductForm extends React.Component {
         </FormGroup>
 
         <FormGroup>
-          <Label for="methodology">Service Wallet Address:</Label>
+          <Label for="ind_val">Service Wallet Address:</Label>
           <Input
             type="text"
-            name="methodology"
+            name="ind_val"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.methodology)}
@@ -159,10 +162,21 @@ class NewProductForm extends React.Component {
         </FormGroup>
 
         <FormGroup>
-          <Label for="methodology">Individual Amount:</Label>
+          <Label for="serv_name">Individual Amount:</Label>
           <Input
             type="text"
-            name="methodology"
+            name="serv_name"
+            onChange={this.onChange}
+            required
+            value={this.defaultIfEmpty(this.state.methodology)}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="serv_acc_id">Service Account ID:</Label>
+          <Input
+            type="text"
+            name="serv_acc_id"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.methodology)}

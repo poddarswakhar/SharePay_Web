@@ -12,7 +12,7 @@ class Header extends Component {
       <div className="text-center" >
         <div style={{backgroundColor: 'black', borderBottom: "4px solid blue" }} onClick={this.handleDivClick}>
             <img
-            src="https://i.ibb.co/VJHRbjc/SHARE-PAY.png"
+            src="https://i.ibb.co/qBL4k6N/logo.png"
             width="150"
             className="img-thumbnail"
             style={{ marginTop: "20px", backgroundColor: 'black', border: "none" }}
