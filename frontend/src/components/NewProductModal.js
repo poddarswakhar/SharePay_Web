@@ -24,7 +24,7 @@ class NewProductModal extends Component {
     var title = "Editing Product";
     var button = <Button style={{ backgroundColor: "#385a8a" }} onClick={this.toggle}>Edit</Button>;
     if (create) {
-      title = "Creating New Product";
+      title = "Creating New Group";
 
       button = (
         <Button
