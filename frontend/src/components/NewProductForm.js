@@ -46,6 +46,7 @@ class NewProductForm extends React.Component {
     axios.post(API_URL, this.state).then(() => {
       this.props.resetState();
       this.props.toggle();
+      console.log(this.state);
     }).catch(error => {
       alert("WARNING: Product is not Created! Check the fields again! Make sure the Date is in desired format!");
       console.error(error);
@@ -80,9 +81,9 @@ class NewProductForm extends React.Component {
     return (
       <Form onSubmit={this.props.products ? this.editProduct : this.createProduct}>
         <FormGroup>
-          <Label for="user1_name">User 1 Name:</Label>
+          <Label for="user1_name">User 1 Email:</Label>
           <Input
-            type="text"
+            type="email"
             name="user1_name"
             onChange={this.onChange}
             required
@@ -100,9 +101,9 @@ class NewProductForm extends React.Component {
           />
         </FormGroup>
         <FormGroup>
-          <Label for="user2_name">User 2 Name:</Label>
+          <Label for="user2_name">User 2 Email:</Label>
           <Input
-            type="text"
+            type="email"
             name="user2_name"
             onChange={this.onChange}
             required
@@ -120,9 +121,9 @@ class NewProductForm extends React.Component {
           />
         </FormGroup>
         <FormGroup>
-          <Label for="user3_name">User 3 Name:</Label>
+          <Label for="user3_name">User 3 Email:</Label>
           <Input
-            type="text"
+            type="email"
             name="user3_name"
             onChange={this.onChange}
             required
@@ -141,7 +142,18 @@ class NewProductForm extends React.Component {
         </FormGroup>
 
         <FormGroup>
-          <Label for="dest_wal">Service Name:</Label>
+          <Label for="serv_name">Service Name:</Label>
+          <Input
+            type="text"
+            name="serv_name"
+            onChange={this.onChange}
+            required
+            value={this.defaultIfEmpty(this.state.methodology)}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="dest_wal">Service Wallet Address:</Label>
           <Input
             type="text"
             name="dest_wal"
@@ -152,21 +164,10 @@ class NewProductForm extends React.Component {
         </FormGroup>
 
         <FormGroup>
-          <Label for="ind_val">Service Wallet Address:</Label>
+          <Label for="ind_val">Individual Amount:</Label>
           <Input
             type="text"
             name="ind_val"
-            onChange={this.onChange}
-            required
-            value={this.defaultIfEmpty(this.state.methodology)}
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <Label for="serv_name">Individual Amount:</Label>
-          <Input
-            type="text"
-            name="serv_name"
             onChange={this.onChange}
             required
             value={this.defaultIfEmpty(this.state.methodology)}
