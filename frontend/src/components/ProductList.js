@@ -17,11 +17,11 @@ class ProductList extends Component {
           <thead>
             <tr>
               <th>Group ID</th>
-              <th>User 1 Name</th>
+              <th>User 1 Email</th>
               <th>User 1 Wallet Address</th>
-              <th>User 2 Name</th>
+              <th>User 2 Email</th>
               <th>User 2 Wallet Address</th>
-              <th>User 3 Name</th>
+              <th>User 3 Email</th>
               <th>User 3 Wallet Address</th>
               <th>Service Name</th>
               <th>Service Wallet Address</th>
