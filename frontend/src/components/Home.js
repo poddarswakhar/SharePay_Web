@@ -5,6 +5,8 @@ import NewProductModal from "./NewProductModal";
 
 import axios from "axios";
 import { API_URL } from "../constants";
+import SignModal from "./SignModal";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 
 // This is the top heirarchy JS file
 
@@ -12,6 +14,11 @@ class Home extends Component {
   // the variable we have to keep track
   state = {
     products: [], // queryset
+    isModalOpen: false // new state property for modal
+  };
+
+  toggleModal = () => {
+    this.setState({ isModalOpen: !this.state.isModalOpen });
   };
 
   // states management
@@ -41,6 +48,27 @@ class Home extends Component {
   render() {
     return (
       <Container style={{ marginTop: "20px" }}>
+        <div className="text-center">
+          <Button
+            color="primary"
+            className="text-center"
+            onClick={this.toggleModal}
+            style={{ minWidth: "200px", backgroundColor: "black" }}
+          >
+            SIGN CONTRACT
+          </Button>
+        </div>
+        <br></br>
+
+      
+      {this.state.isModalOpen && (
+        <SignModal
+          create={true}
+          resetState={this.resetState}
+          isOpen={this.state.isModalOpen} // new prop for modal
+          toggle={this.toggleModal} // new prop for modal
+        />
+      )}
         <br></br><br></br>
         <Row>
           <Col>
