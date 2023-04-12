@@ -13,13 +13,24 @@ from django.conf import settings
 
 def sendEmail(address, contractAdd):
     send_mail(
-        "SHARE PAY SIGN NOTIFICATION",
-        "TEST MSG",
+        "[Action Needed] SharePay Sign Your Smart Contract Here",
+        "Dear User,\n \nYou were added to a group with Smart Contract Address: " + contractAdd + ". Please Sign this contract on www.sharepay.com & click the SIGN CONTRACT button. Thank you.\n"
+        + "\nSincerely\nSharePay Admin",
         settings.EMAIL_HOST_USER,
-        ['swakharpoddar@gmail.com'],
+        address,
         fail_silently=False
     )
 
+
+def sendEmailRenewal(address, contractAdd):
+    send_mail(
+        "[Action Needed] SharePay Sign Your Renewal Here",
+        "Dear User,\n \nYou were set to renew your subscription of Smart Contract Address: " + contractAdd + ". Please Sign this contract on www.sharepay.com & click the SIGN CONTRACT button. Thank you.\n"
+        + "\nSincerely\nSharePay Admin",
+        settings.EMAIL_HOST_USER,
+        address,
+        fail_silently=False
+    )
 
 @api_view(['GET', 'POST'])
 def grp(request):
@@ -41,7 +52,6 @@ def grp(request):
     if request.method == 'GET':
         data = Group.objects.all()
         serializer = GroupSerializers(data, context={'request': request}, many=True)
-        # sendEmail()
         return Response(serializer.data)
 
     elif request.method == 'POST':
@@ -55,7 +65,13 @@ def grp(request):
                                   ind_val=n["ind_val"], serv_name=n["serv_name"], serv_acc_id=n["serv_acc_id"],
                                   ren=n["ren"])
                 temp_data.save()
+
+                # deploy thr contract (pass the email list, and from that method call the email(address, contractAddress))
+                # for test below line, delete once the deploy function is created and chaining is done
+                sendEmail([n['user1_name'], n['user2_name'], n['user3_name']], "0x12638128383")
+
                 return Response(status=status.HTTP_201_CREATED)
+
             except:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -90,9 +106,12 @@ def sign(request):
         pri = request.query_params.get('pri')
         con = request.query_params.get('con')
 
+        z = 10
+
         try:
             a = 2
-            # call method here
+            # call method here for signing the contract
+            return Response(status=status.HTTP_201_CREATED)
 
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
