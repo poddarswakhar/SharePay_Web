@@ -22,5 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     re_path(r'^api/models/group/$', views.grp),
     re_path(r'^api/models/group_del/$', views.grp_del),
+    re_path(r'^api/models/sign/$', views.sign),
 
 ]

@@ -80,3 +80,19 @@ def grp_del(request):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET', 'POST'])
+def sign(request):
+    if request.method == 'GET':
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'POST':
+        pub = request.query_params.get('pub')
+        pri = request.query_params.get('pri')
+        con = request.query_params.get('con')
+
+        try:
+            a = 2
+            # call method here
+
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
