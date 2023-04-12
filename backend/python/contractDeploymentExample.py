@@ -18,11 +18,13 @@ from solcx import compile_source
 
 compiled_sol = compile_source(
     '''
-    pragma solidity >0.5.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-    contract MoneyPool {
+contract MoneyPool {
     mapping(address => uint) public balances;
     address[] public users;
+    address payable netflix = payable(0x7d1017267455FAFec280F51b3Fb6E139Dfd8CDb0);
 
     function deposit() public payable {
         if (balances[msg.sender] == 0) {
@@ -31,20 +33,20 @@ compiled_sol = compile_source(
         balances[msg.sender] += msg.value;
     }
 
-    function withdraw(uint amount) public {
-        require(amount > 0, "Withdrawal amount must be greater than 0");
+    function withdraw() public {
 
         uint totalBalance = address(this).balance;
-        require(amount <= totalBalance, "Insufficient funds in the money pool");
+        require(1 <= totalBalance, "Insufficient funds in the money pool");
 
-        for (uint i = 0; i < users.length; i++) {
-            address user = users[i];
-            uint userBalance = balances[user];
-            uint userShare = (userBalance * amount) / totalBalance;
+        // for (uint i = 0; i < users.length; i++) {
+        //     address user = users[i];
+        //     uint userBalance = balances[user];
+        //     uint userShare = (userBalance * amount) / totalBalance;
 
-            balances[user] -= userShare;
-            payable(user).transfer(userShare);
-        }
+        //     balances[user] -= userShare;
+        //     payable(user).transfer(userShare);
+        // }
+        payable(netflix).transfer(100000000000000000);
     }
 }
     ''',
@@ -66,6 +68,8 @@ w3 = Web3(Web3.HTTPProvider('https://sepolia.infura.io/v3/7e2ee82c1a1f4a8a9b3b75
 #set pre-funded account as sender
 
 #private_key = os.environ["PRIVATE_KEY"]
+
+#hardcoded private key
 private_key="0x896c9790b20f73c0e9186889e0bc4fa74df9963a474e3cd87b811b5c2d7100cb"
 account = Account.from_key(private_key)
 w3.eth.defaultAccount = account.address
@@ -101,3 +105,4 @@ greeter = w3.eth.contract(
 )
 
 print("Contract address:", contract_address)
+
