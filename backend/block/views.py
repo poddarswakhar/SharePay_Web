@@ -7,6 +7,19 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+def sendEmail(address, contractAdd):
+    send_mail(
+        "SHARE PAY SIGN NOTIFICATION",
+        "TEST MSG",
+        settings.EMAIL_HOST_USER,
+        ['swakharpoddar@gmail.com'],
+        fail_silently=False
+    )
+
 
 @api_view(['GET', 'POST'])
 def grp(request):
@@ -28,6 +41,7 @@ def grp(request):
     if request.method == 'GET':
         data = Group.objects.all()
         serializer = GroupSerializers(data, context={'request': request}, many=True)
+        # sendEmail()
         return Response(serializer.data)
 
     elif request.method == 'POST':
@@ -64,3 +78,5 @@ def grp_del(request):
     if request.method == 'DELETE':
         data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
