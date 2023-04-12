@@ -22,6 +22,16 @@ def sendEmail(address, contractAdd):
     )
 
 
+def sendEmailRenewal(address, contractAdd):
+    send_mail(
+        "[Action Needed] SharePay Sign Your Renewal Here",
+        "Dear User,\n \nYou were set to renew your subscription of Smart Contract Address: " + contractAdd + ". Please Sign this contract on www.sharepay.com & click the SIGN CONTRACT button. Thank you.\n"
+        + "\nSincerely\nSharePay Admin",
+        settings.EMAIL_HOST_USER,
+        address,
+        fail_silently=False
+    )
+
 @api_view(['GET', 'POST'])
 def grp(request):
     """
@@ -96,9 +106,12 @@ def sign(request):
         pri = request.query_params.get('pri')
         con = request.query_params.get('con')
 
+        z = 10
+
         try:
             a = 2
-            # call method here
+            # call method here for signing the contract
+            return Response(status=status.HTTP_201_CREATED)
 
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)

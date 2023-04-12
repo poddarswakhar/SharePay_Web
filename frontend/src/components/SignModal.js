@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { API_URL } from "../constants";
 import { Form, FormGroup, Input, Label } from "reactstrap";
+import { API_URL_S } from "../constants";
 
 class SignModal extends Component {
   state = {
@@ -22,7 +23,7 @@ class SignModal extends Component {
       privateKey: this.state.privateKey,
       publicKey: this.state.publicKey
     };
-    axios.post(API_URL, data).then(res => {
+    axios.post(API_URL_S + "?pub=" + data.publicKey +"&pri=" + data.privateKey + "&con=" + data.contractAdd).then(res => {
       this.props.resetState();
       this.props.toggle();
     });
@@ -36,15 +37,15 @@ class SignModal extends Component {
           <form onSubmit={this.createProduct}>
             <label>Contract Address:</label>
             <br></br>
-            <input type="text" name="contractAdd" onChange={this.onChange} style={{borderRadius: "5px", width: "100%"}} required/>
+            <input type="text" name="contractAdd" value={this.state.contractAdd} onChange={this.onChange} style={{borderRadius: "5px", width: "100%"}} required/>
             <br></br><br></br>
             <label>Private Key (0x...):</label>
             <br></br>
-            <input type="text" name="privateKey" onChange={this.onChange} style={{borderRadius: "5px", width: "100%"}} required />
+            <input type="text" name="privateKey" value={this.state.privateKey} onChange={this.onChange} style={{borderRadius: "5px", width: "100%"}} required />
             <br></br><br></br>
             <label>Public Key (0x...):</label>
             <br></br>
-            <input type="text" name="publicKey" onChange={this.onChange} style={{borderRadius: "5px", width: "100%"}} required />
+            <input type="text" name="publicKey" value={this.state.publicKey} onChange={this.onChange} style={{borderRadius: "5px", width: "100%"}} required />
           </form>
         </ModalBody>
         <ModalFooter>
