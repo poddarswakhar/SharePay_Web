@@ -27,11 +27,9 @@ class Group(models.Model):
 
     serv_acc_id = models.CharField(max_length=230)
 
-    ren = models.DateTimeField(auto_now_add=True)
+    ren = models.DateTimeField()
 
     contract_address = models.TextField(max_length=45, null=True, default=None)
 
     abi = models.JSONField(null=True, default=None)
 
-    def __str__(self):
-        return self.name + " " + self.email

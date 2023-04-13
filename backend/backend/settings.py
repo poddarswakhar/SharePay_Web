@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'block',
     'utils',
+
 ]
 
 MIDDLEWARE = [

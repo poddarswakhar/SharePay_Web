@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from block.models import Group
 from block.serializers import *
+import time
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from django.conf import settings
 
 from utils.functions import deploy_contract, deposit, withdraw
 
-from models import Group
+from .models import Group
 
 from datetime import datetime, timedelta
 
@@ -37,6 +37,7 @@ def sendEmailRenewal(address, contractAdd):
         address,
         fail_silently=False
     )
+
 
 @api_view(['GET', 'POST'])
 def grp(request):
@@ -66,13 +67,21 @@ def grp(request):
             n = serializer.data
             try:
                 contract_address, abi = deploy_contract()
+
+                while True:
+                    # Check the condition
+                    if contract_address and abi:
+                        # Exit the loop if the condition is true
+                        break
+
+                    # Call the sleep function
+                    time.sleep(1)
+
                 temp_data = Group(user1_name=n['user1_name'], user1_wal=n['user1_wal'], user2_name=n['user2_name'],
                                   user2_wal=n['user2_wal'],
                                   user3_name=n['user3_name'], user3_wal=n['user3_wal'], dest_wal=n["dest_wal"],
                                   ind_val=n["ind_val"], serv_name=n["serv_name"], serv_acc_id=n["serv_acc_id"],
-                                  ren=n["ren"],
-                                  contract_address=n[contract_address],
-                                  abi=n[abi])
+                                  ren=n["ren"], contract_address=contract_address, abi=abi)
                 temp_data.save()
 
                 # deploy thr contract (pass the email list, and from that method call the email(address, contractAddress))
@@ -81,7 +90,8 @@ def grp(request):
 
                 return Response(status=status.HTTP_201_CREATED)
 
-            except:
+            except Exception as e:
+                print(e)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -115,18 +125,27 @@ def sign(request):
         private_key = request.query_params.get('pri')
         contract_address = request.query_params.get('con')
 
-        abi = Group.object.filter(contract_address=contract_address).values_list('abi')
+        group = Group.objects.filter(contract_address=contract_address)
+
+        for a in group:
+            abi = a.abi
 
         if not deposit(public_key, private_key, contract_address, abi):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         st = withdraw(contract_address, abi)
 
-        if st != 1:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        while True:
+            # Check the condition
+            if st:
+                # Exit the loop if the condition is true
+                if st != 1:
+                    break
+
+            # Call the sleep function
+            time.sleep(1)
 
         return Response(status=status.HTTP_200_OK)
-
 
 
 @api_view(['GET', 'POST'])
@@ -147,7 +166,7 @@ def anni(request):
     elif request.method == 'POST':
         date_string = request.query_params.get('pub')
         print(date_string.rsplit(":", 1)[0])
-        date_time_obj = datetime.strptime(date_string.rsplit(":", 1)[0]+"Z", '%Y-%m-%dT%H:%MZ')
+        date_time_obj = datetime.strptime(date_string.rsplit(":", 1)[0] + "Z", '%Y-%m-%dT%H:%MZ')
 
         date_time_obj = date_time_obj - timedelta(hours=8)
 
