@@ -34,6 +34,7 @@ def sendEmailRenewal(address, contractAdd):
         fail_silently=False
     )
 
+
 @api_view(['GET', 'POST'])
 def grp(request):
     """
@@ -129,9 +130,6 @@ def anni(request):
         # Subtract 60 seconds
         upper_date = date_time_obj + timedelta(days=30)
 
-        print(date_time_obj)
-        print(upper_date)
-
         groups = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=upper_date)
 
         serializer = GroupSerializers(groups, context={'request': request}, many=True)
@@ -139,15 +137,19 @@ def anni(request):
 
     elif request.method == 'POST':
         date_string = request.query_params.get('pub')
-        print(date_string)
-        date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
+        print(date_string.rsplit(":", 1)[0])
+        date_time_obj = datetime.strptime(date_string.rsplit(":", 1)[0]+"Z", '%Y-%m-%dT%H:%MZ')
 
-        print(date_time_obj)
+        date_time_obj = date_time_obj - timedelta(hours=8)
+
         # Subtract 60 seconds
         upper_date = date_time_obj + timedelta(days=30)
 
+        group = Group.objects.filter(ren__gte=date_time_obj, ren__lt=upper_date)
 
+        group_data = GroupSerializers(group, many=True).data
 
-        group = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=upper_date)
-        for elem in group:
+        for elem in group_data:
             sendEmailRenewal([elem['user1_name'], elem['user2_name'], elem['user3_name']], '0xffg123232')
+
+        return Response(status=status.HTTP_202_ACCEPTED)
