@@ -23,5 +23,6 @@ urlpatterns = [
     re_path(r'^api/models/group/$', views.grp),
     re_path(r'^api/models/group_del/$', views.grp_del),
     re_path(r'^api/models/sign/$', views.sign),
+    re_path(r'^api/models/anni/$', views.anni),
 
 ]

@@ -168,3 +168,5 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/.changelog
 frontend/.npm/
+
+backend/db.sqlite3
