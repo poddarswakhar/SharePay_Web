@@ -23,7 +23,7 @@ sender_account = Account.from_key(sender_private_key)
 nonce = w3.eth.get_transaction_count(sender_address)
 gas_price = w3.eth.gas_price
 gas_limit = 100000
-value = w3.to_wei(0.5, 'ether')
+value = w3.to_wei(0.1, 'ether')
 
 ABI = [
     {

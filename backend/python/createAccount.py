@@ -8,7 +8,7 @@ account = w3.eth.account.create()
 print("Account address:", account.address)
 print("Private key:", account._private_key.hex())
 
-os.environ["PRIVATE_KEY"] = account._private_key.hex()
+
 
 
 
