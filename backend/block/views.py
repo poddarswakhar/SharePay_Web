@@ -14,6 +14,8 @@ from utils.functions import deploy_contract, deposit, withdraw
 
 from models import Group
 
+from datetime import datetime, timedelta
+
 
 def sendEmail(address, contractAdd):
     send_mail(
@@ -125,3 +127,38 @@ def sign(request):
 
         return Response(status=status.HTTP_200_OK)
 
+
+
+@api_view(['GET', 'POST'])
+def anni(request):
+    if request.method == 'GET':
+        date_string = request.query_params.get('pub')
+        date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+
+        # start_date = datetime(2020, 1, 1)
+        # Subtract 60 seconds
+        upper_date = date_time_obj + timedelta(days=30)
+
+        groups = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=upper_date)
+
+        serializer = GroupSerializers(groups, context={'request': request}, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        date_string = request.query_params.get('pub')
+        print(date_string.rsplit(":", 1)[0])
+        date_time_obj = datetime.strptime(date_string.rsplit(":", 1)[0]+"Z", '%Y-%m-%dT%H:%MZ')
+
+        date_time_obj = date_time_obj - timedelta(hours=8)
+
+        # Subtract 60 seconds
+        upper_date = date_time_obj + timedelta(days=30)
+
+        group = Group.objects.filter(ren__gte=date_time_obj, ren__lt=upper_date)
+
+        group_data = GroupSerializers(group, many=True).data
+
+        for elem in group_data:
+            sendEmailRenewal([elem['user1_name'], elem['user2_name'], elem['user3_name']], '0xffg123232')
+
+        return Response(status=status.HTTP_202_ACCEPTED)
