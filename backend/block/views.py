@@ -127,23 +127,27 @@ def anni(request):
 
         # start_date = datetime(2020, 1, 1)
         # Subtract 60 seconds
-        #start_date = date_time_obj - timedelta(seconds=60)
+        upper_date = date_time_obj + timedelta(days=30)
 
+        print(date_time_obj)
+        print(upper_date)
 
-
-        groups = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=)
+        groups = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=upper_date)
 
         serializer = GroupSerializers(groups, context={'request': request}, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
         date_string = request.query_params.get('pub')
-        date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+        print(date_string)
+        date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
 
+        print(date_time_obj)
         # Subtract 60 seconds
-        start_date = date_time_obj - timedelta(seconds=60)
+        upper_date = date_time_obj + timedelta(days=30)
 
-        group = Group.objects.filter(ren__range=(start_date, date_time_obj))
+
+
+        group = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=upper_date)
         for elem in group:
             sendEmailRenewal([elem['user1_name'], elem['user2_name'], elem['user3_name']], '0xffg123232')
-

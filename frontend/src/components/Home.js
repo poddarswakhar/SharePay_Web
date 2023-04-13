@@ -24,7 +24,7 @@ class Home extends Component {
   // states management
   componentDidMount() {
     this.resetState();
-    setInterval(this.sendDate, 600000);
+    setInterval(this.sendDate, 30000);
   }
 
   // using axios to do the GET request for all the product
