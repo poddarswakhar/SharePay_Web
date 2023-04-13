@@ -10,6 +10,10 @@ from rest_framework import status
 from django.core.mail import send_mail
 from django.conf import settings
 
+from utils.functions import deploy_contract, deposit, withdraw
+
+from models import Group
+
 
 def sendEmail(address, contractAdd):
     send_mail(
@@ -59,16 +63,19 @@ def grp(request):
         if serializer.is_valid():
             n = serializer.data
             try:
+                contract_address, abi = deploy_contract()
                 temp_data = Group(user1_name=n['user1_name'], user1_wal=n['user1_wal'], user2_name=n['user2_name'],
                                   user2_wal=n['user2_wal'],
                                   user3_name=n['user3_name'], user3_wal=n['user3_wal'], dest_wal=n["dest_wal"],
                                   ind_val=n["ind_val"], serv_name=n["serv_name"], serv_acc_id=n["serv_acc_id"],
-                                  ren=n["ren"])
+                                  ren=n["ren"],
+                                  contract_address=n[contract_address],
+                                  abi=n[abi])
                 temp_data.save()
 
                 # deploy thr contract (pass the email list, and from that method call the email(address, contractAddress))
                 # for test below line, delete once the deploy function is created and chaining is done
-                sendEmail([n['user1_name'], n['user2_name'], n['user3_name']], "0x12638128383")
+                sendEmail([n['user1_name'], n['user2_name'], n['user3_name']], contract_address)
 
                 return Response(status=status.HTTP_201_CREATED)
 
@@ -102,16 +109,19 @@ def sign(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'POST':
-        pub = request.query_params.get('pub')
-        pri = request.query_params.get('pri')
-        con = request.query_params.get('con')
+        public_key = request.query_params.get('pub')
+        private_key = request.query_params.get('pri')
+        contract_address = request.query_params.get('con')
 
-        z = 10
+        abi = Group.object.filter(contract_address=contract_address).values_list('abi')
 
-        try:
-            a = 2
-            # call method here for signing the contract
-            return Response(status=status.HTTP_201_CREATED)
-
-        except:
+        if not deposit(public_key, private_key, contract_address, abi):
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        st = withdraw(contract_address, abi)
+
+        if st != 1:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_200_OK)
+
