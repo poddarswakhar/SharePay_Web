@@ -24,7 +24,7 @@ class Home extends Component {
   // states management
   componentDidMount() {
     this.resetState();
-    setInterval(this.sendDate, 60000);
+    setInterval(this.sendDate, 600000);
   }
 
   // using axios to do the GET request for all the product
@@ -45,12 +45,13 @@ class Home extends Component {
   sendDate = () => {
     const currentDateTime = new Date().toISOString();
     axios
-      .post(API_URL_A + "?date=" +  currentDateTime)
+      .post(API_URL_A + "?pub=" +  currentDateTime)
       .then((res) => {
         console.log(currentDateTime);
       })
       .catch((error) => {
         console.error("Error Sending Date:", error);
+        console.log(currentDateTime);
       });
   };
 

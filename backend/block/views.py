@@ -10,6 +10,8 @@ from rest_framework import status
 from django.core.mail import send_mail
 from django.conf import settings
 
+from datetime import datetime, timedelta
+
 
 def sendEmail(address, contractAdd):
     send_mail(
@@ -117,19 +119,31 @@ def sign(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def anni(request):
     if request.method == 'GET':
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        date_string = request.query_params.get('pub')
+        date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+
+        # start_date = datetime(2020, 1, 1)
+        # Subtract 60 seconds
+        #start_date = date_time_obj - timedelta(seconds=60)
+
+
+
+        groups = Group.objects.filter(ren__gte=date_time_obj).filter(ren__lt=)
+
+        serializer = GroupSerializers(groups, context={'request': request}, many=True)
+        return Response(serializer.data)
 
     elif request.method == 'POST':
-        date = request.query_params.get('pub')
+        date_string = request.query_params.get('pub')
+        date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
 
-        try:
-            a = 2
-            # call method here for signing the contract
-            print(date)
-            return Response(status=status.HTTP_201_CREATED)
+        # Subtract 60 seconds
+        start_date = date_time_obj - timedelta(seconds=60)
 
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        group = Group.objects.filter(ren__range=(start_date, date_time_obj))
+        for elem in group:
+            sendEmailRenewal([elem['user1_name'], elem['user2_name'], elem['user3_name']], '0xffg123232')
+
