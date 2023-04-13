@@ -4,7 +4,7 @@ import ProductList from "./ProductList";
 import NewProductModal from "./NewProductModal";
 
 import axios from "axios";
-import { API_URL } from "../constants";
+import { API_URL, API_URL_A } from "../constants";
 import SignModal from "./SignModal";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 
@@ -24,6 +24,7 @@ class Home extends Component {
   // states management
   componentDidMount() {
     this.resetState();
+    setInterval(this.sendDate, 60000);
   }
 
   // using axios to do the GET request for all the product
@@ -41,6 +42,17 @@ class Home extends Component {
     });
   };
 
+  sendDate = () => {
+    const currentDateTime = new Date().toISOString();
+    axios
+      .post(API_URL_A + "?date=" +  currentDateTime)
+      .then((res) => {
+        console.log(currentDateTime);
+      })
+      .catch((error) => {
+        console.error("Error Sending Date:", error);
+      });
+  };
 
 
   // rendering the feont end, if the state is not healthy show not healthy message, in the meantime of the request to be made and the state to be updated, show Loading message

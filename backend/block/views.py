@@ -115,3 +115,21 @@ def sign(request):
 
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def anni(request):
+    if request.method == 'GET':
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'POST':
+        date = request.query_params.get('pub')
+
+        try:
+            a = 2
+            # call method here for signing the contract
+            print(date)
+            return Response(status=status.HTTP_201_CREATED)
+
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
