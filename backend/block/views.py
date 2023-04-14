@@ -171,7 +171,7 @@ def anni(request):
         date_time_obj = date_time_obj - timedelta(hours=8)
 
         # Subtract 60 seconds
-        upper_date = date_time_obj + timedelta(days=30)
+        upper_date = date_time_obj + timedelta(days=1)
 
         group = Group.objects.filter(ren__gte=date_time_obj, ren__lt=upper_date)
 
