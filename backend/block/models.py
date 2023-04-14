@@ -29,5 +29,7 @@ class Group(models.Model):
 
     ren = models.DateTimeField()
 
-    def __str__(self):
-        return self.name + " " + self.email
+    contract_address = models.TextField(max_length=45, null=True, default=None)
+
+    abi = models.JSONField(null=True, default=None)
+

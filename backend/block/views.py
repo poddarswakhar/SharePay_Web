@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from block.models import Group
 from block.serializers import *
+import time
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -9,6 +9,10 @@ from rest_framework import status
 
 from django.core.mail import send_mail
 from django.conf import settings
+
+from utils.functions import deploy_contract, deposit, withdraw
+
+from .models import Group
 
 from datetime import datetime, timedelta
 
@@ -62,20 +66,32 @@ def grp(request):
         if serializer.is_valid():
             n = serializer.data
             try:
+                contract_address, abi = deploy_contract()
+
+                while True:
+                    # Check the condition
+                    if contract_address and abi:
+                        # Exit the loop if the condition is true
+                        break
+
+                    # Call the sleep function
+                    time.sleep(1)
+
                 temp_data = Group(user1_name=n['user1_name'], user1_wal=n['user1_wal'], user2_name=n['user2_name'],
                                   user2_wal=n['user2_wal'],
                                   user3_name=n['user3_name'], user3_wal=n['user3_wal'], dest_wal=n["dest_wal"],
                                   ind_val=n["ind_val"], serv_name=n["serv_name"], serv_acc_id=n["serv_acc_id"],
-                                  ren=n["ren"])
+                                  ren=n["ren"], contract_address=contract_address, abi=abi)
                 temp_data.save()
 
                 # deploy thr contract (pass the email list, and from that method call the email(address, contractAddress))
                 # for test below line, delete once the deploy function is created and chaining is done
-                sendEmail([n['user1_name'], n['user2_name'], n['user3_name']], "0x12638128383")
+                sendEmail([n['user1_name'], n['user2_name'], n['user3_name']], contract_address)
 
                 return Response(status=status.HTTP_201_CREATED)
 
-            except:
+            except Exception as e:
+                print(e)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -105,19 +121,31 @@ def sign(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'POST':
-        pub = request.query_params.get('pub')
-        pri = request.query_params.get('pri')
-        con = request.query_params.get('con')
+        public_key = request.query_params.get('pub')
+        private_key = request.query_params.get('pri')
+        contract_address = request.query_params.get('con')
 
-        z = 10
+        group = Group.objects.filter(contract_address=contract_address)
 
-        try:
-            a = 2
-            # call method here for signing the contract
-            return Response(status=status.HTTP_201_CREATED)
+        for a in group:
+            abi = a.abi
 
-        except:
+        if not deposit(public_key, private_key, contract_address, abi):
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        st = withdraw(contract_address, abi)
+
+        while True:
+            # Check the condition
+            if st:
+                # Exit the loop if the condition is true
+                if st != 1:
+                    break
+
+            # Call the sleep function
+            time.sleep(1)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'POST'])
@@ -138,12 +166,12 @@ def anni(request):
     elif request.method == 'POST':
         date_string = request.query_params.get('pub')
         print(date_string.rsplit(":", 1)[0])
-        date_time_obj = datetime.strptime(date_string.rsplit(":", 1)[0]+"Z", '%Y-%m-%dT%H:%MZ')
+        date_time_obj = datetime.strptime(date_string.rsplit(":", 1)[0] + "Z", '%Y-%m-%dT%H:%MZ')
 
         date_time_obj = date_time_obj - timedelta(hours=8)
 
         # Subtract 60 seconds
-        upper_date = date_time_obj + timedelta(days=30)
+        upper_date = date_time_obj + timedelta(days=1)
 
         group = Group.objects.filter(ren__gte=date_time_obj, ren__lt=upper_date)
 
