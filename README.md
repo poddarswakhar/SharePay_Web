@@ -37,6 +37,7 @@ This is the root of the project.
 <li> Solcx </li>
 <br></br>
 <b><u> Frontend </u></b>
+
 <li> NodeJS </li>
 <li> Bootstrap </li>
 <li> Reactstrap </li>
