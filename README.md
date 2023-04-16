@@ -91,5 +91,8 @@ npm start
 
 The project should be running with all the features, if any support is needed to get it started please do contact me at spoddar@student.ubc.ca or open an issue on the repo.
 
-### Documentation
-The Final report can be found on the root also
+### Note
+For testing or using the product its recommended to use the Sepolia test network, and use the faucet to get some test ETH (https://sepoliafaucet.com/)
+
+### Final Report
+Final report can be found on this root (FinalReport.pdf)
