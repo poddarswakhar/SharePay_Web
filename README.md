@@ -5,8 +5,11 @@ Repository for SharePay DApp.
 
 This is the root of the project.
 
-<li> backend: contains the backend code and the SQL Lite Database </li>
+<li> backend: contains the backend code, solidity code and the SQL Database </li>
 <li> frontend: contains the frontend code for react framework </li>
+<li> FinalReport.pdf: The report for the project according to the guidelines on the syllabus </li>
+<li> PresentationSlides.pdf: The slides used for the presentation </li>
+<li> Demo Video Link: https://youtu.be/EjDmkX4-83E </li>
 
 <br></br>
 
